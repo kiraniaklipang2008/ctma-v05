@@ -18,6 +18,7 @@ export const Route = createFileRoute("/tagihan")({
 });
 
 function Tagihan() {
+  const { active } = useSantri();
   const [tab, setTab] = useState<"due" | "paid">("due");
   const [q, setQ] = useState("");
 
@@ -39,7 +40,7 @@ function Tagihan() {
     return CATEGORY_ORDER.filter((c) => map.has(c)).map((c) => [c, map.get(c)!] as const);
   }, [filtered]);
 
-  const totalDue = BILLS.reduce((a, b) => a + Math.max(0, b.total - b.paid), 0);
+  const totalDue = active.totalDue;
 
   return (
     <MobileShell>

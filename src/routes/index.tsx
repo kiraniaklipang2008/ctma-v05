@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Phone, Lock, Eye, EyeOff, GraduationCap, ArrowRight } from "lucide-react";
+import { Phone, Lock, Eye, EyeOff, GraduationCap, ArrowRight, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: LoginPage,
@@ -120,21 +120,22 @@ function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-5 rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-4">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Demo Akun Wali Siswa
-            </p>
-            <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <p className="text-muted-foreground">No. HP</p>
-                <p className="font-semibold text-foreground tracking-wide">081234567890</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Password</p>
-                <p className="font-semibold text-foreground tracking-wide">wali123</p>
-              </div>
-            </div>
+          <div className="mt-5 flex items-center gap-3">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              atau
+            </span>
+            <div className="flex-1 h-px bg-border" />
           </div>
+
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/dashboard" })}
+            className="mt-4 w-full py-3.5 rounded-2xl border border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 transition active:scale-[0.98] flex items-center justify-center gap-2 text-primary font-semibold text-sm"
+          >
+            <Zap size={16} className="fill-primary" />
+            Quick Login — Demo Wali Siswa
+          </button>
         </div>
       </div>
     </div>

@@ -35,11 +35,11 @@ type Method = {
 };
 
 const METHODS: Method[] = [
-  { id: "bca", label: "BCA Virtual Account", desc: "Transfer otomatis", icon: Building2, fee: 0, account: "8808 1234 5678 9012", holder: "PPTQ Cahaya Tasbih" },
-  { id: "mandiri", label: "Mandiri VA", desc: "Transfer otomatis", icon: Building2, fee: 0, account: "8950 2345 6789 0123", holder: "PPTQ Cahaya Tasbih" },
-  { id: "gopay", label: "GoPay", desc: "Saldo e-wallet", icon: Smartphone, fee: 1500, account: "0812 3456 7890", holder: "PPTQ Cahaya Tasbih" },
-  { id: "ovo", label: "OVO", desc: "Saldo e-wallet", icon: Smartphone, fee: 1500, account: "0812 3456 7890", holder: "PPTQ Cahaya Tasbih" },
-  { id: "card", label: "Kartu Debit / Kredit", desc: "Visa, Mastercard, JCB", icon: CreditCard, fee: 2500, account: "—", holder: "PPTQ Cahaya Tasbih" },
+  { id: "bca", label: "Bank BCA", desc: "Transfer manual antar bank", icon: Building2, fee: 0, account: "1840558992", holder: "Yayasan PPTQ Cahaya Tasbih" },
+  { id: "mandiri", label: "Bank Mandiri", desc: "Transfer manual antar bank", icon: Building2, fee: 0, account: "1370009988421", holder: "Yayasan PPTQ Cahaya Tasbih" },
+  { id: "bsi", label: "Bank Syariah Indonesia", desc: "Transfer manual antar bank", icon: Building2, fee: 0, account: "7211884502", holder: "Yayasan PPTQ Cahaya Tasbih" },
+  { id: "bri", label: "Bank BRI", desc: "Transfer manual antar bank", icon: Building2, fee: 0, account: "002901024458503", holder: "Yayasan PPTQ Cahaya Tasbih" },
+  { id: "gopay", label: "GoPay", desc: "Transfer manual e-wallet", icon: Smartphone, fee: 0, account: "081288995521", holder: "Ust. Hasanuddin (Bendahara)" },
 ];
 
 const fmt = (n: number) =>

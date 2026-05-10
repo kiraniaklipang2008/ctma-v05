@@ -230,12 +230,17 @@ function TopupPage() {
                 <button
                   key={m.id}
                   onClick={() => setMethod(m.id)}
-                  className="w-full flex items-center gap-3 p-4 active:bg-secondary transition text-left"
+                  className={`w-full flex items-center gap-3 p-4 transition text-left ${
+                    active ? "bg-primary/5" : "active:bg-secondary"
+                  }`}
                 >
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                      active ? "bg-[var(--gradient-card)] text-primary-foreground" : "bg-secondary text-primary"
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition ${
+                      active
+                        ? "text-white shadow-[var(--shadow-glow)] ring-2 ring-primary/30"
+                        : "bg-secondary text-primary"
                     }`}
+                    style={active ? { background: "var(--gradient-card)" } : undefined}
                   >
                     <Icon size={18} />
                   </div>

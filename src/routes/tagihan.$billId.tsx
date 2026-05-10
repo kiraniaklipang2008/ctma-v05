@@ -21,7 +21,7 @@ export const Route = createFileRoute("/tagihan/$billId")({
 });
 
 function BillDetail() {
-  const bill = Route.useLoaderData();
+  const bill = Route.useLoaderData() as Bill;
   const navigate = useNavigate();
   const [picked, setPicked] = useState<Set<string>>(new Set());
 

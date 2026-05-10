@@ -74,16 +74,16 @@ function Tagihan() {
           style={{ background: "var(--gradient-card)" }}
         >
           <div className="flex items-start justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <p className="text-[11px] text-white/70">Nama Siswa / Santri</p>
-              <p className="text-base font-bold tracking-tight mt-0.5">
-                MUHAMMAD FAKHRI HAMIZAN
+              <p className="text-base font-bold tracking-tight mt-0.5 truncate">
+                {active.name.toUpperCase()}
               </p>
-              <p className="text-[11px] text-white/70 mt-0.5">Kelas : 8A</p>
+              <p className="text-[11px] text-white/70 mt-0.5">
+                {active.jenjang} · Kelas {active.className}
+              </p>
             </div>
-            <button className="text-[11px] text-white/90 font-semibold underline-offset-2 hover:underline shrink-0">
-              Ganti Santri
-            </button>
+            <SantriSwitcherTrigger variant="subtle">Ganti Santri</SantriSwitcherTrigger>
           </div>
 
           <div className="mt-5">

@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { listPendingTx, subscribePendingTx, type PendingTx } from "@/data/pendingTx";
 import {
   ArrowLeft,
   Search,

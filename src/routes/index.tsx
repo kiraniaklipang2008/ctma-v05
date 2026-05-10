@@ -105,12 +105,21 @@ function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Belum punya akun?{" "}
-            <Link to="/" className="text-primary font-semibold">
-              Daftar di sini
-            </Link>
-          </p>
+          <div className="mt-5 rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+              Demo Akun Wali Siswa
+            </p>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <p className="text-muted-foreground">No. HP</p>
+                <p className="font-semibold text-foreground tracking-wide">081234567890</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Password</p>
+                <p className="font-semibold text-foreground tracking-wide">wali123</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

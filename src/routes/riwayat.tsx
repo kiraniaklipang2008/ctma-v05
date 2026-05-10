@@ -44,6 +44,8 @@ type Tx = {
   ref?: string;
   items?: LineItem[];
   note?: string;
+  status?: "pending" | "approved" | "rejected";
+  payId?: string;
 };
 
 const CAT_META: Record<Category, { label: string; icon: typeof Wallet; tone: string }> = {

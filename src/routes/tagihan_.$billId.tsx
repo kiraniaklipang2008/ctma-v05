@@ -4,6 +4,7 @@ import { ArrowLeft, Check, CheckCircle2 } from "lucide-react";
 import { BILLS, fmtIDR as fmt, type Bill } from "@/data/bills";
 import { useSantri } from "@/contexts/SantriContext";
 import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
+import { createPendingTx } from "@/data/pendingTx";
 
 export const Route = createFileRoute("/tagihan_/$billId")({
   component: BillDetail,

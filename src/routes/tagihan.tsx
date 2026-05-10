@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Search,
@@ -8,39 +8,12 @@ import {
   Receipt,
 } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
+import { BILLS, CATEGORY_ORDER, fmtIDR as fmt, type Bill } from "@/data/bills";
 
 export const Route = createFileRoute("/tagihan")({
   component: Tagihan,
   head: () => ({ meta: [{ title: "Tagihan — SantriPay" }] }),
 });
-
-type Bill = {
-  id: string;
-  name: string;
-  category: string;
-  total: number;
-  paid: number;
-  due?: string;
-};
-
-const BILLS: Bill[] = [
-  // Pendaftaran
-  { id: "b1", name: "BIAYA APLIKASI CT - SMP 2025/2026", category: "Pendaftaran", total: 60000, paid: 50000, due: "Jatuh tempo 20 Mei" },
-  // Bulanan
-  { id: "b2", name: "SYAHRIAH SMP 2025/2026", category: "Bulanan", total: 6000000, paid: 5500000, due: "Jatuh tempo 25 Mei" },
-  { id: "b3", name: "UANG MAKAN MEI 2026", category: "Bulanan", total: 750000, paid: 0, due: "Jatuh tempo 28 Mei" },
-  // Tahunan
-  { id: "b4", name: "SERAGAM & PERLENGKAPAN 2025/2026", category: "Tahunan", total: 1250000, paid: 1250000 },
-  { id: "b5", name: "BUKU PAKET SMP 2025/2026", category: "Tahunan", total: 850000, paid: 600000, due: "Jatuh tempo 30 Mei" },
-  // Kegiatan
-  { id: "b6", name: "RIHLAH AKHIR TAHUN 2026", category: "Kegiatan", total: 450000, paid: 200000, due: "Jatuh tempo 10 Juni" },
-  { id: "b7", name: "WISUDA TAHFIDZ 2026", category: "Kegiatan", total: 350000, paid: 350000 },
-];
-
-const CATEGORY_ORDER = ["Pendaftaran", "Bulanan", "Tahunan", "Kegiatan"];
-
-const fmt = (n: number) =>
-  "Rp" + new Intl.NumberFormat("id-ID").format(n);
 
 function Tagihan() {
   const [tab, setTab] = useState<"due" | "paid">("due");
@@ -229,12 +202,14 @@ function BillCard({ bill }: { bill: Bill }) {
               <CheckCircle2 size={13} /> Lunas
             </span>
           ) : (
-            <button
+            <Link
+              to="/tagihan/$billId"
+              params={{ billId: bill.id }}
               className="shrink-0 px-4 py-2.5 rounded-xl text-primary-foreground text-xs font-bold shadow-[var(--shadow-soft)] active:scale-95 transition flex items-center gap-1"
               style={{ background: "var(--gradient-card)" }}
             >
               Bayar <ChevronRight size={14} />
-            </button>
+            </Link>
           )}
         </div>
 

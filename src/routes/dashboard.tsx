@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   Bell,
   Plus,
@@ -23,9 +23,9 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const actions = [
-  { label: "Topup Saldo", icon: Plus, accent: "from-primary to-primary-glow" },
-  { label: "Atur Limit", icon: Sliders, accent: "from-primary-deep to-primary" },
-  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary" },
+  { label: "Topup Saldo", icon: Plus, accent: "from-primary to-primary-glow", to: "/topup" as const },
+  { label: "Atur Limit", icon: Sliders, accent: "from-primary-deep to-primary", to: "/limit" as const },
+  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary", to: "/dashboard" as const },
 ];
 
 const txs = [
@@ -36,6 +36,7 @@ const txs = [
 ];
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const fmt = (n: number) =>
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
@@ -113,9 +114,10 @@ function Dashboard() {
       {/* Quick actions */}
       <section className="px-6 mt-6">
         <div className="grid grid-cols-3 gap-3">
-          {actions.map(({ label, icon: Icon, accent }) => (
+          {actions.map(({ label, icon: Icon, accent, to }) => (
             <button
               key={label}
+              onClick={() => navigate({ to })}
               className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border shadow-[var(--shadow-soft)] active:scale-95 transition"
             >
               <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${accent} flex items-center justify-center shadow-[var(--shadow-soft)]`}>

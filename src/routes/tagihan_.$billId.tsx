@@ -144,7 +144,13 @@ function BillDetail() {
                 return (
                   <div
                     key={it.id}
-                    className="relative flex items-center gap-3 pl-4 pr-3 py-3 rounded-2xl bg-secondary/70 border border-border"
+                    onClick={() => !it.paid && togglePick(it.id)}
+                    role={it.paid ? undefined : "button"}
+                    className={`relative flex items-center gap-3 pl-4 pr-3 py-3 rounded-2xl bg-secondary/70 border transition ${
+                      !it.paid && checked
+                        ? "border-primary ring-1 ring-primary/40"
+                        : "border-border"
+                    } ${it.paid ? "" : "cursor-pointer active:scale-[0.99]"}`}
                   >
                     <span
                       className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-full ${
@@ -152,13 +158,9 @@ function BillDetail() {
                       }`}
                     />
 
-                    <button
-                      onClick={() => !it.paid && togglePick(it.id)}
-                      disabled={it.paid}
-                      className="shrink-0 disabled:opacity-50"
-                    >
+                    <span className="shrink-0">
                       <CheckBox checked={it.paid || checked} disabled={it.paid} />
-                    </button>
+                    </span>
 
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-muted-foreground">{fmt(it.amount)}</p>

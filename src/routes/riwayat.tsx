@@ -196,10 +196,34 @@ function RiwayatPage() {
   const [range, setRange] = useState<DateRange>("all");
   const [q, setQ] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [pending, setPending] = useState<PendingTx[]>([]);
+
+  useEffect(() => {
+    const refresh = () => setPending(listPendingTx());
+    refresh();
+    return subscribePendingTx(refresh);
+  }, []);
+
+  const allTxs: Tx[] = useMemo(() => {
+    const mapped: Tx[] = pending.map((p) => ({
+      id: p.id,
+      name: p.billName,
+      category: "spp",
+      type: "out",
+      amount: -p.amount,
+      date: p.createdAt,
+      method: `${p.bankName} ${p.bankAccount}`,
+      ref: p.id,
+      note: `Kode unik +${p.uniqueCode}`,
+      status: p.status,
+      payId: p.id,
+    }));
+    return [...mapped, ...TXS];
+  }, [pending]);
 
   const filtered = useMemo(() => {
     const now = Date.now();
-    return TXS.filter((t) => {
+    return allTxs.filter((t) => {
       if (type !== "all" && t.type !== type) return false;
       if (cat !== "all" && t.category !== cat) return false;
       if (range !== "all") {
@@ -216,7 +240,7 @@ function RiwayatPage() {
       }
       return true;
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [type, cat, range, q]);
+  }, [allTxs, type, cat, range, q]);
 
   const totalIn = filtered.filter((t) => t.type === "in").reduce((a, b) => a + b.amount, 0);
   const totalOut = filtered.filter((t) => t.type === "out").reduce((a, b) => a + b.amount, 0);

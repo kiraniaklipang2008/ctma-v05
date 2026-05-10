@@ -202,12 +202,14 @@ function BillCard({ bill }: { bill: Bill }) {
               <CheckCircle2 size={13} /> Lunas
             </span>
           ) : (
-            <button
+            <Link
+              to="/tagihan/$billId"
+              params={{ billId: bill.id }}
               className="shrink-0 px-4 py-2.5 rounded-xl text-primary-foreground text-xs font-bold shadow-[var(--shadow-soft)] active:scale-95 transition flex items-center gap-1"
               style={{ background: "var(--gradient-card)" }}
             >
               Bayar <ChevronRight size={14} />
-            </button>
+            </Link>
           )}
         </div>
 

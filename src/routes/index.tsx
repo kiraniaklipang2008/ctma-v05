@@ -27,8 +27,14 @@ function LoginPage() {
           <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/10 blur-3xl" />
           <div className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center mb-6 border border-white/20">
-              <GraduationCap className="text-white" size={28} />
+            <div className="flex items-center gap-3 mb-7">
+              <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shrink-0">
+                <GraduationCap className="text-white" size={24} />
+              </div>
+              <div className="leading-tight">
+                <p className="text-[10px] font-semibold tracking-[0.2em] text-white/70">PPTQ</p>
+                <p className="text-sm font-bold text-white tracking-wide">CAHAYA TASBIH</p>
+              </div>
             </div>
             <h1 className="text-3xl font-bold text-white tracking-tight">
               Selamat Datang 👋

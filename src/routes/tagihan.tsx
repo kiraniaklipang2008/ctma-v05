@@ -19,6 +19,7 @@ export const Route = createFileRoute("/tagihan")({
 });
 
 function Tagihan() {
+  const navigate = useNavigate();
   const { active } = useSantri();
   const [tab, setTab] = useState<"due" | "paid">("due");
   const [q, setQ] = useState("");

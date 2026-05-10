@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, Check, CheckCircle2, User } from "lucide-react";
-import { BILLS, fmtIDR as fmt } from "@/data/bills";
+import { BILLS, fmtIDR as fmt, type Bill } from "@/data/bills";
 
 export const Route = createFileRoute("/tagihan/$billId")({
   component: BillDetail,
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/tagihan/$billId")({
       Tagihan tidak ditemukan.
     </div>
   ),
-  loader: ({ params }) => {
+  loader: ({ params }): Bill => {
     const bill = BILLS.find((b) => b.id === params.billId);
     if (!bill) throw notFound();
     return bill;

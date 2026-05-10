@@ -11,6 +11,7 @@ import {
   Utensils,
   BookOpen,
   Wallet,
+  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
@@ -40,6 +41,7 @@ const txs = [
 function Dashboard() {
   const navigate = useNavigate();
   const [hide, setHide] = useState(false);
+  const { active } = useSantri();
   const fmt = (n: number) =>
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
 

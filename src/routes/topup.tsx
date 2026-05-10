@@ -180,9 +180,12 @@ function TopupPage() {
                     }}
                     className={`py-3 rounded-2xl text-xs font-bold border transition active:scale-95 ${
                       active
-                        ? "bg-[var(--gradient-card)] text-primary-foreground border-transparent shadow-[var(--shadow-soft)]"
-                        : "bg-secondary text-foreground border-transparent"
+                        ? "text-white border-transparent shadow-[var(--shadow-glow)] ring-2 ring-primary/40 scale-[1.03]"
+                        : "bg-secondary text-foreground border-transparent hover:border-primary/30"
                     }`}
+                    style={
+                      active ? { background: "var(--gradient-card)" } : undefined
+                    }
                   >
                     {n >= 1_000_000 ? `${n / 1_000_000}jt` : `${n / 1000}rb`}
                   </button>
@@ -227,12 +230,17 @@ function TopupPage() {
                 <button
                   key={m.id}
                   onClick={() => setMethod(m.id)}
-                  className="w-full flex items-center gap-3 p-4 active:bg-secondary transition text-left"
+                  className={`w-full flex items-center gap-3 p-4 transition text-left ${
+                    active ? "bg-primary/5" : "active:bg-secondary"
+                  }`}
                 >
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                      active ? "bg-[var(--gradient-card)] text-primary-foreground" : "bg-secondary text-primary"
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition ${
+                      active
+                        ? "text-white shadow-[var(--shadow-glow)] ring-2 ring-primary/30"
+                        : "bg-secondary text-primary"
                     }`}
+                    style={active ? { background: "var(--gradient-card)" } : undefined}
                   >
                     <Icon size={18} />
                   </div>

@@ -18,19 +18,26 @@ export function BottomNav() {
             <Link
               key={to}
               to={to}
-              className="flex flex-col items-center gap-1 px-5 py-2 rounded-2xl transition-all"
+              className={`flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl transition-all ${
+                active ? "bg-primary/10 -translate-y-0.5" : ""
+              }`}
             >
               <div
                 className={`flex items-center justify-center w-10 h-10 rounded-2xl transition-all ${
                   active
-                    ? "bg-[var(--gradient-card)] text-primary-foreground shadow-[var(--shadow-glow)]"
+                    ? "text-white shadow-[var(--shadow-glow)] ring-2 ring-primary/30 scale-110"
                     : "text-muted-foreground"
                 }`}
+                style={
+                  active
+                    ? { background: "var(--gradient-card)" }
+                    : undefined
+                }
               >
-                <Icon size={20} strokeWidth={2.2} />
+                <Icon size={20} strokeWidth={2.4} />
               </div>
               <span
-                className={`text-[10px] font-semibold tracking-wide ${
+                className={`text-[10px] font-bold tracking-wide ${
                   active ? "text-primary" : "text-muted-foreground"
                 }`}
               >

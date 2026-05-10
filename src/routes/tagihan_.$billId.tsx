@@ -175,7 +175,10 @@ function BillDetail() {
                       </span>
                     ) : (
                       <button
-                        onClick={() => navigate({ to: "/topup" })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate({ to: "/topup" });
+                        }}
                         className="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-[var(--shadow-soft)] active:scale-95 transition"
                         style={{ background: "var(--gradient-card)" }}
                       >
@@ -189,29 +192,25 @@ function BillDetail() {
           </div>
         </div>
 
-        {/* Sticky pay bar */}
+        {/* Sticky pay bar — compact */}
         {unpaid.length > 0 && (
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md px-4 pb-4 pt-3 bg-gradient-to-t from-background via-background to-background/0 z-40">
-            <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
-                    Total Bayar
-                  </p>
-                  <p className="text-lg font-bold text-foreground">{fmt(pickedTotal)}</p>
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  <span className="font-semibold text-foreground">{picked.size}</span> dari{" "}
-                  {unpaid.length} cicilan
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md px-3 pb-3 pt-2 bg-gradient-to-t from-background via-background to-background/0 z-40">
+            <div className="rounded-xl border border-border bg-card shadow-[var(--shadow-card)] px-3 py-2 flex items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="text-[9px] text-muted-foreground font-semibold uppercase tracking-wider leading-none">
+                  Total · {picked.size}/{unpaid.length}
+                </p>
+                <p className="text-base font-extrabold text-foreground leading-tight mt-0.5">
+                  {fmt(pickedTotal)}
                 </p>
               </div>
               <button
                 onClick={() => navigate({ to: "/topup" })}
                 disabled={picked.size === 0}
-                className="w-full py-3.5 rounded-2xl text-primary-foreground font-semibold text-sm shadow-[var(--shadow-glow)] disabled:opacity-50 transition active:scale-[0.98]"
+                className="shrink-0 px-5 py-2.5 rounded-xl text-primary-foreground font-bold text-sm shadow-[var(--shadow-glow)] disabled:opacity-50 transition active:scale-[0.98]"
                 style={{ background: "var(--gradient-card)" }}
               >
-                Lanjutkan Pembayaran
+                Lanjutkan
               </button>
             </div>
           </div>

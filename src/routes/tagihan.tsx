@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { BILLS, CATEGORY_ORDER, fmtIDR as fmt, type Bill } from "@/data/bills";
+import { useSantri } from "@/contexts/SantriContext";
+import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
 
 export const Route = createFileRoute("/tagihan")({
   component: Tagihan,
@@ -16,6 +18,7 @@ export const Route = createFileRoute("/tagihan")({
 });
 
 function Tagihan() {
+  const { active } = useSantri();
   const [tab, setTab] = useState<"due" | "paid">("due");
   const [q, setQ] = useState("");
 
@@ -37,7 +40,7 @@ function Tagihan() {
     return CATEGORY_ORDER.filter((c) => map.has(c)).map((c) => [c, map.get(c)!] as const);
   }, [filtered]);
 
-  const totalDue = BILLS.reduce((a, b) => a + Math.max(0, b.total - b.paid), 0);
+  const totalDue = active.totalDue;
 
   return (
     <MobileShell>
@@ -72,16 +75,16 @@ function Tagihan() {
           style={{ background: "var(--gradient-card)" }}
         >
           <div className="flex items-start justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <p className="text-[11px] text-white/70">Nama Siswa / Santri</p>
-              <p className="text-base font-bold tracking-tight mt-0.5">
-                MUHAMMAD FAKHRI HAMIZAN
+              <p className="text-base font-bold tracking-tight mt-0.5 truncate">
+                {active.name.toUpperCase()}
               </p>
-              <p className="text-[11px] text-white/70 mt-0.5">Kelas : 8A</p>
+              <p className="text-[11px] text-white/70 mt-0.5">
+                {active.jenjang} · Kelas {active.className}
+              </p>
             </div>
-            <button className="text-[11px] text-white/90 font-semibold underline-offset-2 hover:underline shrink-0">
-              Ganti Santri
-            </button>
+            <SantriSwitcherTrigger variant="subtle">Ganti Santri</SantriSwitcherTrigger>
           </div>
 
           <div className="mt-5">

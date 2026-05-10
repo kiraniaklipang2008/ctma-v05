@@ -11,9 +11,12 @@ import {
   Utensils,
   BookOpen,
   Wallet,
+  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
+import { useSantri } from "@/contexts/SantriContext";
+import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
@@ -38,6 +41,7 @@ const txs = [
 function Dashboard() {
   const navigate = useNavigate();
   const [hide, setHide] = useState(false);
+  const { active } = useSantri();
   const fmt = (n: number) =>
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(n);
 
@@ -71,20 +75,24 @@ function Dashboard() {
 
           <div className="relative">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs uppercase tracking-widest text-white/70 font-semibold">
                   Saldo Santri
                 </p>
-                <p className="text-[11px] text-white/60 mt-0.5">Fatimah Az-Zahra · Kelas 9A</p>
+                <p className="text-[11px] text-white/60 mt-0.5 truncate">
+                  {active.name} · Kelas {active.className}
+                </p>
               </div>
-              <div className="px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-[10px] font-semibold backdrop-blur">
-                AKTIF
-              </div>
+              <SantriSwitcherTrigger>
+                <span className="px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-[10px] font-semibold backdrop-blur flex items-center gap-1">
+                  Ganti <ChevronDown size={12} />
+                </span>
+              </SantriSwitcherTrigger>
             </div>
 
             <div className="mt-5 flex items-end gap-3">
               <h2 className="text-3xl font-bold tracking-tight">
-                {hide ? "Rp ••••••" : fmt(2840000)}
+                {hide ? "Rp ••••••" : fmt(active.saldo)}
               </h2>
               <button onClick={() => setHide((h) => !h)} className="mb-1.5 text-white/80">
                 {hide ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -94,17 +102,17 @@ function Dashboard() {
             <div className="mt-5 flex items-center justify-between text-xs">
               <div>
                 <p className="text-white/60">Limit Harian</p>
-                <p className="font-semibold">Rp 100.000</p>
+                <p className="font-semibold">{fmt(active.dailyLimit)}</p>
               </div>
               <div className="h-8 w-px bg-white/20" />
               <div>
                 <p className="text-white/60">Pengeluaran</p>
-                <p className="font-semibold">Rp 38.000</p>
+                <p className="font-semibold">{fmt(active.spentToday)}</p>
               </div>
               <div className="h-8 w-px bg-white/20" />
               <div>
                 <p className="text-white/60">No. Kartu</p>
-                <p className="font-semibold tracking-wider">••42</p>
+                <p className="font-semibold tracking-wider">••{active.cardSuffix}</p>
               </div>
             </div>
           </div>

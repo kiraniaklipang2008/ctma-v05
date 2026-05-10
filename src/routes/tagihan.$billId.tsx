@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, Check, CheckCircle2, User } from "lucide-react";
 import { BILLS, fmtIDR as fmt, type Bill } from "@/data/bills";
+import { useSantri } from "@/contexts/SantriContext";
+import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
 
 export const Route = createFileRoute("/tagihan/$billId")({
   component: BillDetail,
@@ -78,17 +80,7 @@ function BillDetail() {
             </h1>
           </div>
 
-          {/* Floating profile pill */}
-          <div className="relative mt-4 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 p-3 flex items-center gap-3 text-white">
-            <div className="w-12 h-12 rounded-full bg-white/20 border border-white/30 flex items-center justify-center shrink-0">
-              <User size={22} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[11px] text-white/75">Nama Siswa / Santri</p>
-              <p className="text-sm font-bold truncate">MUHAMMAD FAKHRI HAMIZAN</p>
-              <p className="text-[11px] text-white/75">Kelas : 8A</p>
-            </div>
-          </div>
+          <ActiveSantriPill />
         </div>
 
         {/* Summary card overlap */}

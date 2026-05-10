@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
+  ArrowLeft,
   Search,
   CheckCircle2,
-  GraduationCap,
   ChevronRight,
   Receipt,
 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import { BILLS, CATEGORY_ORDER, fmtIDR as fmt, type Bill } from "@/data/bills";
 import { useSantri } from "@/contexts/SantriContext";

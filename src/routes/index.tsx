@@ -19,60 +19,44 @@ function LoginPage() {
   return (
     <div className="min-h-screen w-full flex justify-center bg-background">
       <div className="relative w-full max-w-md min-h-screen flex flex-col">
-        {/* Hero header */}
+        {/* Hero header — compact */}
         <div
-          className="relative pt-12 pb-24 px-6 rounded-b-[2.5rem] overflow-hidden"
+          className="relative pt-8 pb-16 px-6 rounded-b-[2rem] overflow-hidden"
           style={{ background: "var(--gradient-hero)" }}
         >
-          {/* Density: glow blobs + grid pattern + sparkles */}
-          <div className="absolute -top-24 -right-16 w-72 h-72 rounded-full bg-primary-glow/30 blur-3xl" />
-          <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-white/15 blur-3xl" />
-          <div className="absolute top-10 right-8 w-24 h-24 rounded-full border border-white/15" />
-          <div className="absolute top-20 right-16 w-16 h-16 rounded-full border border-white/10" />
+          <div className="absolute -top-20 -right-12 w-56 h-56 rounded-full bg-primary-glow/30 blur-3xl" />
+          <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-white/15 blur-3xl" />
+          <div className="absolute top-6 right-6 w-20 h-20 rounded-full border border-white/15" />
           <div
             className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
                 "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
+              backgroundSize: "26px 26px",
               maskImage: "radial-gradient(ellipse at top right, black 30%, transparent 70%)",
             }}
           />
 
-          <div className="relative">
-            {/* Brand row — one line, prominent */}
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/25 shrink-0 shadow-lg">
-                <GraduationCap className="text-white" size={22} />
+          <div className="relative flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/25 shrink-0 shadow-lg">
+                <GraduationCap className="text-white" size={20} />
               </div>
               <div className="flex items-baseline gap-1.5 min-w-0">
-                <span className="text-base font-extrabold text-white tracking-tight whitespace-nowrap">
+                <span className="text-[15px] font-extrabold text-white tracking-tight whitespace-nowrap">
                   PPTQ
                 </span>
-                <span className="text-base font-extrabold text-white tracking-[0.05em] whitespace-nowrap">
+                <span className="text-[15px] font-extrabold text-white tracking-[0.04em] whitespace-nowrap">
                   CAHAYA&nbsp;TASBIH
                 </span>
               </div>
             </div>
-
-            {/* Divider */}
-            <div className="mt-5 h-px bg-gradient-to-r from-white/30 via-white/10 to-transparent" />
-
-            {/* Badge */}
-            <div className="mt-5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur">
+            <div className="hidden xs:inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-              <span className="text-[10px] font-semibold text-white tracking-wider uppercase">
-                Portal Wali Santri
+              <span className="text-[9px] font-semibold text-white tracking-wider uppercase">
+                Wali
               </span>
             </div>
-
-            <h1 className="mt-3 text-[28px] leading-tight font-bold text-white tracking-tight">
-              Assalamualaikum 👋<br />
-              <span className="text-white/90">Selamat Datang</span>
-            </h1>
-            <p className="text-white/75 mt-2 text-[13px] leading-relaxed max-w-[18rem]">
-              Kelola saldo, tagihan, dan limit santri Anda dalam satu aplikasi.
-            </p>
           </div>
         </div>
 

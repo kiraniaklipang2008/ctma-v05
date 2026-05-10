@@ -17,6 +17,8 @@ import { Route as LimitRouteImport } from './routes/limit'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TagihanBillIdRouteImport } from './routes/tagihan_.$billId'
+import { Route as PembayaranPayIdRouteImport } from './routes/pembayaran.$payId'
+import { Route as AdminApprovalRouteImport } from './routes/admin.approval'
 
 const TopupRoute = TopupRouteImport.update({
   id: '/topup',
@@ -58,6 +60,16 @@ const TagihanBillIdRoute = TagihanBillIdRouteImport.update({
   path: '/tagihan/$billId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PembayaranPayIdRoute = PembayaranPayIdRouteImport.update({
+  id: '/pembayaran/$payId',
+  path: '/pembayaran/$payId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminApprovalRoute = AdminApprovalRouteImport.update({
+  id: '/admin/approval',
+  path: '/admin/approval',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +79,8 @@ export interface FileRoutesByFullPath {
   '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
+  '/admin/approval': typeof AdminApprovalRoute
+  '/pembayaran/$payId': typeof PembayaranPayIdRoute
   '/tagihan/$billId': typeof TagihanBillIdRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +91,8 @@ export interface FileRoutesByTo {
   '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
+  '/admin/approval': typeof AdminApprovalRoute
+  '/pembayaran/$payId': typeof PembayaranPayIdRoute
   '/tagihan/$billId': typeof TagihanBillIdRoute
 }
 export interface FileRoutesById {
@@ -88,6 +104,8 @@ export interface FileRoutesById {
   '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
+  '/admin/approval': typeof AdminApprovalRoute
+  '/pembayaran/$payId': typeof PembayaranPayIdRoute
   '/tagihan_/$billId': typeof TagihanBillIdRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +118,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tagihan'
     | '/topup'
+    | '/admin/approval'
+    | '/pembayaran/$payId'
     | '/tagihan/$billId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +130,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tagihan'
     | '/topup'
+    | '/admin/approval'
+    | '/pembayaran/$payId'
     | '/tagihan/$billId'
   id:
     | '__root__'
@@ -120,6 +142,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tagihan'
     | '/topup'
+    | '/admin/approval'
+    | '/pembayaran/$payId'
     | '/tagihan_/$billId'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +155,8 @@ export interface RootRouteChildren {
   RiwayatRoute: typeof RiwayatRoute
   TagihanRoute: typeof TagihanRoute
   TopupRoute: typeof TopupRoute
+  AdminApprovalRoute: typeof AdminApprovalRoute
+  PembayaranPayIdRoute: typeof PembayaranPayIdRoute
   TagihanBillIdRoute: typeof TagihanBillIdRoute
 }
 
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TagihanBillIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pembayaran/$payId': {
+      id: '/pembayaran/$payId'
+      path: '/pembayaran/$payId'
+      fullPath: '/pembayaran/$payId'
+      preLoaderRoute: typeof PembayaranPayIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/approval': {
+      id: '/admin/approval'
+      path: '/admin/approval'
+      fullPath: '/admin/approval'
+      preLoaderRoute: typeof AdminApprovalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -203,8 +243,20 @@ const rootRouteChildren: RootRouteChildren = {
   RiwayatRoute: RiwayatRoute,
   TagihanRoute: TagihanRoute,
   TopupRoute: TopupRoute,
+  AdminApprovalRoute: AdminApprovalRoute,
+  PembayaranPayIdRoute: PembayaranPayIdRoute,
   TagihanBillIdRoute: TagihanBillIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

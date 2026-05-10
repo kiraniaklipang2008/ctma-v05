@@ -1,0 +1,376 @@
+import { createFileRoute, useNavigate, notFound, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Copy,
+  Check,
+  Upload,
+  Building2,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  Image as ImageIcon,
+} from "lucide-react";
+import {
+  attachProof,
+  getPendingTx,
+  subscribePendingTx,
+  type PendingTx,
+} from "@/data/pendingTx";
+import { fmtIDR } from "@/data/bills";
+
+export const Route = createFileRoute("/pembayaran/$payId")({
+  component: PembayaranPage,
+  notFoundComponent: () => (
+    <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">
+      Pembayaran tidak ditemukan.
+    </div>
+  ),
+  loader: ({ params }) => {
+    if (typeof window === "undefined") return null;
+    const tx = getPendingTx(params.payId);
+    if (!tx) throw notFound();
+    return tx;
+  },
+  head: () => ({ meta: [{ title: "Pembayaran — SantriPay" }] }),
+});
+
+function PembayaranPage() {
+  const { payId } = Route.useParams();
+  const navigate = useNavigate();
+  const [tx, setTx] = useState<PendingTx | undefined>(() => getPendingTx(payId));
+
+  useEffect(() => {
+    setTx(getPendingTx(payId));
+    return subscribePendingTx(() => setTx(getPendingTx(payId)));
+  }, [payId]);
+
+  if (!tx) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 text-sm">
+        <p className="text-muted-foreground">Pembayaran tidak ditemukan.</p>
+        <Link to="/tagihan" className="text-primary font-bold">
+          Kembali
+        </Link>
+      </div>
+    );
+  }
+
+  const baseStr = fmtIDR(tx.baseAmount);
+  const totalStr = fmtIDR(tx.amount);
+  const isPending = tx.status === "pending";
+  const isApproved = tx.status === "approved";
+  const isRejected = tx.status === "rejected";
+
+  return (
+    <div className="min-h-screen w-full flex justify-center bg-secondary">
+      <div className="relative w-full max-w-md min-h-screen bg-background pb-32">
+        {/* Header — legacy style */}
+        <div className="px-6 pt-12 pb-3 flex items-center gap-3">
+          <button
+            onClick={() => navigate({ to: "/tagihan" })}
+            className="w-10 h-10 rounded-xl bg-secondary border border-border flex items-center justify-center text-foreground active:scale-95 transition"
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <div className="min-w-0">
+            <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+              Pembayaran
+            </p>
+            <p className="text-base font-bold text-foreground truncate">
+              {tx.billName}
+            </p>
+          </div>
+        </div>
+
+        {/* Status banner */}
+        <div className="px-5 pt-3">
+          <StatusBanner status={tx.status} />
+        </div>
+
+        {/* Nominal card */}
+        <div className="px-5 pt-5">
+          <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)] p-4">
+            <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+              Nominal Transfer
+            </p>
+            <div className="mt-1 flex items-end justify-between gap-3">
+              <p className="text-2xl font-extrabold text-foreground">
+                {totalStr}
+              </p>
+              <CopyButton value={String(tx.amount)} label="Salin" />
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              Dasar {baseStr} +{" "}
+              <span className="font-bold text-primary">
+                {tx.uniqueCode} kode unik
+              </span>{" "}
+              (3 digit terakhir wajib sesuai)
+            </p>
+          </div>
+        </div>
+
+        {/* Bank card */}
+        <div className="px-5 pt-3">
+          <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)] p-4">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-lg bg-secondary text-primary flex items-center justify-center">
+                <Building2 size={16} />
+              </div>
+              <div>
+                <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+                  Transfer ke
+                </p>
+                <p className="text-sm font-bold text-foreground">
+                  Bank {tx.bankName}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-xl bg-secondary/70 border border-border px-3 py-2.5 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                  Nomor Rekening
+                </p>
+                <p className="text-base font-extrabold text-foreground tracking-wider truncate">
+                  {tx.bankAccount}
+                </p>
+              </div>
+              <CopyButton value={tx.bankAccount} label="Salin" />
+            </div>
+
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              a.n. <span className="font-bold text-foreground">{tx.bankHolder}</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Items */}
+        {tx.items && tx.items.length > 0 && (
+          <div className="px-5 pt-3">
+            <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)] p-4">
+              <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider mb-2">
+                Rincian
+              </p>
+              <div className="divide-y divide-border">
+                {tx.items.map((it) => (
+                  <div
+                    key={it.id}
+                    className="py-2 flex items-center justify-between gap-3 text-sm"
+                  >
+                    <span className="text-foreground truncate">{it.label}</span>
+                    <span className="font-bold text-foreground">
+                      {fmtIDR(it.amount)}
+                    </span>
+                  </div>
+                ))}
+                <div className="py-2 flex items-center justify-between gap-3 text-sm">
+                  <span className="text-muted-foreground">Kode Unik</span>
+                  <span className="font-bold text-primary">
+                    +{tx.uniqueCode}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Upload bukti */}
+        <div className="px-5 pt-3">
+          <ProofUploader tx={tx} />
+        </div>
+
+        {/* Sticky action */}
+        {isApproved && (
+          <StickyAction>
+            <button
+              onClick={() => navigate({ to: "/riwayat" })}
+              className="w-full py-3.5 rounded-2xl bg-success text-white font-bold text-sm flex items-center justify-center gap-2"
+            >
+              <CheckCircle2 size={16} /> Lihat di Riwayat
+            </button>
+          </StickyAction>
+        )}
+        {isRejected && (
+          <StickyAction>
+            <button
+              onClick={() => navigate({ to: "/tagihan" })}
+              className="w-full py-3.5 rounded-2xl bg-secondary border border-border text-foreground font-bold text-sm"
+            >
+              Kembali ke Tagihan
+            </button>
+          </StickyAction>
+        )}
+        {isPending && tx.proofDataUrl && (
+          <StickyAction>
+            <button
+              onClick={() => navigate({ to: "/riwayat" })}
+              className="w-full py-3.5 rounded-2xl text-primary-foreground font-bold text-sm shadow-[var(--shadow-glow)] active:scale-[0.98]"
+              style={{ background: "var(--gradient-card)" }}
+            >
+              Lihat Status di Riwayat
+            </button>
+          </StickyAction>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StickyAction({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md px-3 pb-3 pt-2 bg-gradient-to-t from-background via-background to-background/0 z-40">
+      {children}
+    </div>
+  );
+}
+
+function StatusBanner({ status }: { status: PendingTx["status"] }) {
+  if (status === "approved") {
+    return (
+      <div className="rounded-xl border border-success/30 bg-success/10 px-3 py-2.5 flex items-center gap-2">
+        <CheckCircle2 size={16} className="text-success" />
+        <div className="flex-1">
+          <p className="text-xs font-bold text-success">Pembayaran Disetujui</p>
+          <p className="text-[11px] text-success/80">
+            Transaksi sudah diverifikasi petugas.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (status === "rejected") {
+    return (
+      <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2.5 flex items-center gap-2">
+        <XCircle size={16} className="text-destructive" />
+        <div className="flex-1">
+          <p className="text-xs font-bold text-destructive">Pembayaran Ditolak</p>
+          <p className="text-[11px] text-destructive/80">
+            Bukti tidak valid, silakan ulangi.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-xl border border-[oklch(0.78_0.16_75)]/40 bg-[oklch(0.78_0.16_75)]/10 px-3 py-2.5 flex items-center gap-2">
+      <Clock size={16} className="text-[oklch(0.62_0.18_75)]" />
+      <div className="flex-1">
+        <p className="text-xs font-bold text-[oklch(0.55_0.18_75)]">
+          Menunggu Verifikasi
+        </p>
+        <p className="text-[11px] text-[oklch(0.55_0.18_75)]/80">
+          Transfer sesuai nominal lalu unggah bukti.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CopyButton({ value, label }: { value: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch {
+          // ignore
+        }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1400);
+      }}
+      className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold active:scale-95 transition"
+    >
+      {copied ? <Check size={14} /> : <Copy size={14} />}
+      {copied ? "Tersalin" : label}
+    </button>
+  );
+}
+
+function ProofUploader({ tx }: { tx: PendingTx }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const hasProof = !!tx.proofDataUrl;
+  const locked = tx.status === "approved";
+
+  const onPick = (file: File) => {
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      attachProof(tx.id, String(reader.result));
+      setUploading(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)] p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+            Bukti Bayar
+          </p>
+          <p className="text-sm font-bold text-foreground">
+            {hasProof ? "Bukti terunggah" : "Unggah foto bukti transfer"}
+          </p>
+        </div>
+        {hasProof && !locked && (
+          <button
+            onClick={() => inputRef.current?.click()}
+            className="text-[11px] font-bold text-primary"
+          >
+            Ganti
+          </button>
+        )}
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) onPick(f);
+          e.target.value = "";
+        }}
+      />
+
+      {hasProof ? (
+        <div className="mt-3 rounded-xl overflow-hidden border border-border bg-secondary">
+          <img
+            src={tx.proofDataUrl}
+            alt="Bukti transfer"
+            className="w-full max-h-72 object-contain bg-black/5"
+          />
+        </div>
+      ) : (
+        <button
+          disabled={uploading || locked}
+          onClick={() => inputRef.current?.click()}
+          className="mt-3 w-full rounded-xl border-2 border-dashed border-border bg-secondary/50 px-4 py-6 flex flex-col items-center justify-center gap-2 text-muted-foreground active:scale-[0.99] transition disabled:opacity-50"
+        >
+          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+            <Upload size={18} />
+          </div>
+          <p className="text-sm font-bold text-foreground">
+            {uploading ? "Memproses…" : "Pilih Foto Bukti"}
+          </p>
+          <p className="text-[11px]">JPG / PNG, maks. 5 MB</p>
+        </button>
+      )}
+
+      {!hasProof && (
+        <div className="mt-3 flex items-start gap-2 text-[11px] text-muted-foreground">
+          <ImageIcon size={12} className="mt-0.5 shrink-0" />
+          <span>
+            Setelah unggah, status menjadi{" "}
+            <span className="font-bold text-foreground">Pending</span> dan
+            menunggu verifikasi petugas.
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}

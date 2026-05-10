@@ -246,3 +246,22 @@ function CheckBox({ checked, disabled }: { checked: boolean; disabled?: boolean 
     </span>
   );
 }
+
+function ActiveSantriPill() {
+  const { active } = useSantri();
+  return (
+    <div className="relative mt-4 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 p-3 flex items-center gap-3 text-white">
+      <div className="w-12 h-12 rounded-full bg-white/20 border border-white/30 flex items-center justify-center shrink-0 font-bold">
+        {active.initials}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] text-white/75">Nama Siswa / Santri</p>
+        <p className="text-sm font-bold truncate">{active.name.toUpperCase()}</p>
+        <p className="text-[11px] text-white/75">
+          {active.jenjang} · Kelas {active.className}
+        </p>
+      </div>
+      <SantriSwitcherTrigger variant="subtle">Ganti</SantriSwitcherTrigger>
+    </div>
+  );
+}

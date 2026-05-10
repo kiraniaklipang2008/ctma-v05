@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
+  ArrowLeft,
   Search,
   CheckCircle2,
-  GraduationCap,
   ChevronRight,
   Receipt,
 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { MobileShell } from "@/components/MobileShell";
 import { BILLS, CATEGORY_ORDER, fmtIDR as fmt, type Bill } from "@/data/bills";
 import { useSantri } from "@/contexts/SantriContext";
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/tagihan")({
 });
 
 function Tagihan() {
+  const navigate = useNavigate();
   const { active } = useSantri();
   const [tab, setTab] = useState<"due" | "paid">("due");
   const [q, setQ] = useState("");
@@ -44,32 +46,24 @@ function Tagihan() {
 
   return (
     <MobileShell>
-      {/* Hero */}
-      <div
-        className="relative px-6 pt-12 pb-24 text-primary-foreground overflow-hidden"
-        style={{ background: "var(--gradient-hero)" }}
-      >
-        <div className="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-primary-glow/30 blur-3xl" />
-        <div
-          className="absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-            backgroundSize: "26px 26px",
-            maskImage: "radial-gradient(ellipse at top right, black 30%, transparent 70%)",
-          }}
-        />
-
-        <div className="relative flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center">
-            <GraduationCap size={20} />
-          </div>
-          <p className="text-base font-extrabold tracking-tight">PPTQ Cahaya Tasbih</p>
+      {/* Header */}
+      <div className="px-6 pt-12 pb-4 flex items-center gap-3">
+        <button
+          onClick={() => navigate({ to: "/dashboard" })}
+          className="w-10 h-10 rounded-xl bg-secondary border border-border flex items-center justify-center text-foreground active:scale-95 transition"
+        >
+          <ArrowLeft size={18} />
+        </button>
+        <div>
+          <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+            Tagihan
+          </p>
+          <p className="text-base font-bold text-foreground">Pembayaran Santri</p>
         </div>
       </div>
 
-      {/* Floating profile card */}
-      <div className="px-4 -mt-16 relative z-10">
+      {/* Profile card */}
+      <div className="px-4 mt-2 relative z-10">
         <div
           className="rounded-2xl p-5 text-primary-foreground shadow-[var(--shadow-glow)]"
           style={{ background: "var(--gradient-card)" }}

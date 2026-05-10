@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { listPendingTx, subscribePendingTx, type PendingTx } from "@/data/pendingTx";
 import {
   ArrowLeft,
   Search,
@@ -43,6 +44,8 @@ type Tx = {
   ref?: string;
   items?: LineItem[];
   note?: string;
+  status?: "pending" | "approved" | "rejected";
+  payId?: string;
 };
 
 const CAT_META: Record<Category, { label: string; icon: typeof Wallet; tone: string }> = {
@@ -193,10 +196,34 @@ function RiwayatPage() {
   const [range, setRange] = useState<DateRange>("all");
   const [q, setQ] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [pending, setPending] = useState<PendingTx[]>([]);
+
+  useEffect(() => {
+    const refresh = () => setPending(listPendingTx());
+    refresh();
+    return subscribePendingTx(refresh);
+  }, []);
+
+  const allTxs: Tx[] = useMemo(() => {
+    const mapped: Tx[] = pending.map((p) => ({
+      id: p.id,
+      name: p.billName,
+      category: "spp",
+      type: "out",
+      amount: -p.amount,
+      date: p.createdAt,
+      method: `${p.bankName} ${p.bankAccount}`,
+      ref: p.id,
+      note: `Kode unik +${p.uniqueCode}`,
+      status: p.status,
+      payId: p.id,
+    }));
+    return [...mapped, ...TXS];
+  }, [pending]);
 
   const filtered = useMemo(() => {
     const now = Date.now();
-    return TXS.filter((t) => {
+    return allTxs.filter((t) => {
       if (type !== "all" && t.type !== type) return false;
       if (cat !== "all" && t.category !== cat) return false;
       if (range !== "all") {
@@ -213,7 +240,7 @@ function RiwayatPage() {
       }
       return true;
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [type, cat, range, q]);
+  }, [allTxs, type, cat, range, q]);
 
   const totalIn = filtered.filter((t) => t.type === "in").reduce((a, b) => a + b.amount, 0);
   const totalOut = filtered.filter((t) => t.type === "out").reduce((a, b) => a + b.amount, 0);
@@ -424,10 +451,23 @@ function TxRow({ tx, open, onToggle }: { tx: Tx; open: boolean; onToggle: () => 
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-foreground truncate">{tx.name}</p>
-          <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+          <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 flex-wrap">
             <span className="px-1.5 py-0.5 rounded bg-secondary text-[9px] font-bold uppercase tracking-wider">
               {meta.label}
             </span>
+            {tx.status && (
+              <span
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider text-white ${
+                  tx.status === "approved"
+                    ? "bg-success"
+                    : tx.status === "rejected"
+                    ? "bg-destructive"
+                    : "bg-[oklch(0.78_0.16_75)]"
+                }`}
+              >
+                {tx.status}
+              </span>
+            )}
             {fmtTime(tx.date)}
           </p>
         </div>

@@ -4,6 +4,7 @@ import { ArrowLeft, Check, CheckCircle2 } from "lucide-react";
 import { BILLS, fmtIDR as fmt, type Bill } from "@/data/bills";
 import { useSantri } from "@/contexts/SantriContext";
 import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
+import { createPendingTx } from "@/data/pendingTx";
 
 export const Route = createFileRoute("/tagihan_/$billId")({
   component: BillDetail,
@@ -177,7 +178,16 @@ function BillDetail() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate({ to: "/topup" });
+                          const tx = createPendingTx({
+                            billId: bill.id,
+                            billName: `${bill.shortName} — ${it.label}`,
+                            baseAmount: it.amount,
+                            bankName: "BCA",
+                            bankAccount: "1234567890",
+                            bankHolder: "Yayasan SantriPay",
+                            items: [{ id: it.id, label: it.label, amount: it.amount }],
+                          });
+                          navigate({ to: "/pembayaran/$payId", params: { payId: tx.id } });
                         }}
                         className="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-[var(--shadow-soft)] active:scale-95 transition"
                         style={{ background: "var(--gradient-card)" }}
@@ -205,7 +215,23 @@ function BillDetail() {
                 </p>
               </div>
               <button
-                onClick={() => navigate({ to: "/topup" })}
+                onClick={() => {
+                  const items = bill.installments.filter((i) => picked.has(i.id));
+                  if (items.length === 0) return;
+                  const tx = createPendingTx({
+                    billId: bill.id,
+                    billName:
+                      items.length === 1
+                        ? `${bill.shortName} — ${items[0].label}`
+                        : `${bill.shortName} (${items.length} item)`,
+                    baseAmount: pickedTotal,
+                    bankName: "BCA",
+                    bankAccount: "1234567890",
+                    bankHolder: "Yayasan SantriPay",
+                    items: items.map((i) => ({ id: i.id, label: i.label, amount: i.amount })),
+                  });
+                  navigate({ to: "/pembayaran/$payId", params: { payId: tx.id } });
+                }}
                 disabled={picked.size === 0}
                 className="shrink-0 px-5 py-2.5 rounded-xl text-primary-foreground font-bold text-sm shadow-[var(--shadow-glow)] disabled:opacity-50 transition active:scale-[0.98]"
                 style={{ background: "var(--gradient-card)" }}

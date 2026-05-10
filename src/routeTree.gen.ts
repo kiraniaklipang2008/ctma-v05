@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TopupRouteImport } from './routes/topup'
 import { Route as TagihanRouteImport } from './routes/tagihan'
+import { Route as RiwayatRouteImport } from './routes/riwayat'
 import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as LimitRouteImport } from './routes/limit'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -24,6 +25,11 @@ const TopupRoute = TopupRouteImport.update({
 const TagihanRoute = TagihanRouteImport.update({
   id: '/tagihan',
   path: '/tagihan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiwayatRoute = RiwayatRouteImport.update({
+  id: '/riwayat',
+  path: '/riwayat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfilRoute = ProfilRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
+  '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
+  '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
 }
@@ -69,20 +77,36 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
+  '/riwayat': typeof RiwayatRoute
   '/tagihan': typeof TagihanRoute
   '/topup': typeof TopupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/limit' | '/profil' | '/tagihan' | '/topup'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/limit'
+    | '/profil'
+    | '/riwayat'
+    | '/tagihan'
+    | '/topup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/limit' | '/profil' | '/tagihan' | '/topup'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/limit'
+    | '/profil'
+    | '/riwayat'
+    | '/tagihan'
+    | '/topup'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/limit'
     | '/profil'
+    | '/riwayat'
     | '/tagihan'
     | '/topup'
   fileRoutesById: FileRoutesById
@@ -92,6 +116,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LimitRoute: typeof LimitRoute
   ProfilRoute: typeof ProfilRoute
+  RiwayatRoute: typeof RiwayatRoute
   TagihanRoute: typeof TagihanRoute
   TopupRoute: typeof TopupRoute
 }
@@ -110,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/tagihan'
       fullPath: '/tagihan'
       preLoaderRoute: typeof TagihanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riwayat': {
+      id: '/riwayat'
+      path: '/riwayat'
+      fullPath: '/riwayat'
+      preLoaderRoute: typeof RiwayatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profil': {
@@ -148,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LimitRoute: LimitRoute,
   ProfilRoute: ProfilRoute,
+  RiwayatRoute: RiwayatRoute,
   TagihanRoute: TagihanRoute,
   TopupRoute: TopupRoute,
 }

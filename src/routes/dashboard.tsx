@@ -25,7 +25,7 @@ export const Route = createFileRoute("/dashboard")({
 const actions = [
   { label: "Topup Saldo", icon: Plus, accent: "from-primary to-primary-glow", to: "/topup" as const },
   { label: "Atur Limit", icon: Sliders, accent: "from-primary-deep to-primary", to: "/limit" as const },
-  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary", to: "/dashboard" as const },
+  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary", to: "/riwayat" as const },
 ];
 
 const txs = [

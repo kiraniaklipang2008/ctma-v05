@@ -180,9 +180,12 @@ function TopupPage() {
                     }}
                     className={`py-3 rounded-2xl text-xs font-bold border transition active:scale-95 ${
                       active
-                        ? "bg-[var(--gradient-card)] text-primary-foreground border-transparent shadow-[var(--shadow-soft)]"
-                        : "bg-secondary text-foreground border-transparent"
+                        ? "text-white border-transparent shadow-[var(--shadow-glow)] ring-2 ring-primary/40 scale-[1.03]"
+                        : "bg-secondary text-foreground border-transparent hover:border-primary/30"
                     }`}
+                    style={
+                      active ? { background: "var(--gradient-card)" } : undefined
+                    }
                   >
                     {n >= 1_000_000 ? `${n / 1_000_000}jt` : `${n / 1000}rb`}
                   </button>

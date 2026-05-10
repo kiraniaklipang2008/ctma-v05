@@ -9,11 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TopupRouteImport } from './routes/topup'
 import { Route as TagihanRouteImport } from './routes/tagihan'
 import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as LimitRouteImport } from './routes/limit'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TopupRoute = TopupRouteImport.update({
+  id: '/topup',
+  path: '/topup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TagihanRoute = TagihanRouteImport.update({
   id: '/tagihan',
   path: '/tagihan',
@@ -22,6 +29,11 @@ const TagihanRoute = TagihanRouteImport.update({
 const ProfilRoute = ProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LimitRoute = LimitRouteImport.update({
+  id: '/limit',
+  path: '/limit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -38,39 +50,61 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
   '/tagihan': typeof TagihanRoute
+  '/topup': typeof TopupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
   '/tagihan': typeof TagihanRoute
+  '/topup': typeof TopupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/limit': typeof LimitRoute
   '/profil': typeof ProfilRoute
   '/tagihan': typeof TagihanRoute
+  '/topup': typeof TopupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/profil' | '/tagihan'
+  fullPaths: '/' | '/dashboard' | '/limit' | '/profil' | '/tagihan' | '/topup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/profil' | '/tagihan'
-  id: '__root__' | '/' | '/dashboard' | '/profil' | '/tagihan'
+  to: '/' | '/dashboard' | '/limit' | '/profil' | '/tagihan' | '/topup'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/limit'
+    | '/profil'
+    | '/tagihan'
+    | '/topup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  LimitRoute: typeof LimitRoute
   ProfilRoute: typeof ProfilRoute
   TagihanRoute: typeof TagihanRoute
+  TopupRoute: typeof TopupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/topup': {
+      id: '/topup'
+      path: '/topup'
+      fullPath: '/topup'
+      preLoaderRoute: typeof TopupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tagihan': {
       id: '/tagihan'
       path: '/tagihan'
@@ -83,6 +117,13 @@ declare module '@tanstack/react-router' {
       path: '/profil'
       fullPath: '/profil'
       preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/limit': {
+      id: '/limit'
+      path: '/limit'
+      fullPath: '/limit'
+      preLoaderRoute: typeof LimitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -105,8 +146,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  LimitRoute: LimitRoute,
   ProfilRoute: ProfilRoute,
   TagihanRoute: TagihanRoute,
+  TopupRoute: TopupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

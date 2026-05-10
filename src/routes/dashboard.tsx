@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
+import { useSantri } from "@/contexts/SantriContext";
+import { SantriSwitcherTrigger } from "@/components/SantriSwitcher";
 
 export const Route = createFileRoute("/dashboard")({
   component: Dashboard,

@@ -173,17 +173,11 @@ function BillDetail() {
                       </span>
                     ) : (
                       <button
-                        onClick={() => togglePick(it.id)}
-                        className={`shrink-0 px-5 py-2.5 rounded-xl text-xs font-bold transition active:scale-95 ${
-                          checked
-                            ? "text-primary-foreground shadow-[var(--shadow-soft)]"
-                            : "bg-card text-primary border border-primary/30"
-                        }`}
-                        style={
-                          checked ? { background: "var(--gradient-card)" } : undefined
-                        }
+                        onClick={() => navigate({ to: "/topup" })}
+                        className="shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold text-primary-foreground shadow-[var(--shadow-soft)] active:scale-95 transition"
+                        style={{ background: "var(--gradient-card)" }}
                       >
-                        {checked ? "Dipilih" : "Bayar"}
+                        Bayar Sekarang
                       </button>
                     )}
                   </div>

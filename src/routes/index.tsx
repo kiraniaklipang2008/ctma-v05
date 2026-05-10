@@ -21,26 +21,57 @@ function LoginPage() {
       <div className="relative w-full max-w-md min-h-screen flex flex-col">
         {/* Hero header */}
         <div
-          className="relative pt-14 pb-20 px-6 rounded-b-[2.5rem] overflow-hidden"
+          className="relative pt-12 pb-24 px-6 rounded-b-[2.5rem] overflow-hidden"
           style={{ background: "var(--gradient-hero)" }}
         >
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/10 blur-3xl" />
+          {/* Density: glow blobs + grid pattern + sparkles */}
+          <div className="absolute -top-24 -right-16 w-72 h-72 rounded-full bg-primary-glow/30 blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-white/15 blur-3xl" />
+          <div className="absolute top-10 right-8 w-24 h-24 rounded-full border border-white/15" />
+          <div className="absolute top-20 right-16 w-16 h-16 rounded-full border border-white/10" />
+          <div
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+              maskImage: "radial-gradient(ellipse at top right, black 30%, transparent 70%)",
+            }}
+          />
+
           <div className="relative">
-            <div className="flex items-center gap-3 mb-7">
-              <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shrink-0">
-                <GraduationCap className="text-white" size={24} />
+            {/* Brand row — one line, prominent */}
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/25 shrink-0 shadow-lg">
+                <GraduationCap className="text-white" size={22} />
               </div>
-              <div className="leading-tight">
-                <p className="text-[10px] font-semibold tracking-[0.2em] text-white/70">PPTQ</p>
-                <p className="text-sm font-bold text-white tracking-wide">CAHAYA TASBIH</p>
+              <div className="flex items-baseline gap-1.5 min-w-0">
+                <span className="text-base font-extrabold text-white tracking-tight whitespace-nowrap">
+                  PPTQ
+                </span>
+                <span className="text-base font-extrabold text-white tracking-[0.05em] whitespace-nowrap">
+                  CAHAYA&nbsp;TASBIH
+                </span>
               </div>
             </div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">
-              Selamat Datang 👋
+
+            {/* Divider */}
+            <div className="mt-5 h-px bg-gradient-to-r from-white/30 via-white/10 to-transparent" />
+
+            {/* Badge */}
+            <div className="mt-5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 border border-white/20 backdrop-blur">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+              <span className="text-[10px] font-semibold text-white tracking-wider uppercase">
+                Portal Wali Santri
+              </span>
+            </div>
+
+            <h1 className="mt-3 text-[28px] leading-tight font-bold text-white tracking-tight">
+              Assalamualaikum 👋<br />
+              <span className="text-white/90">Selamat Datang</span>
             </h1>
-            <p className="text-white/80 mt-2 text-sm leading-relaxed">
-              Masuk untuk mengelola saldo & tagihan santri Anda.
+            <p className="text-white/75 mt-2 text-[13px] leading-relaxed max-w-[18rem]">
+              Kelola saldo, tagihan, dan limit santri Anda dalam satu aplikasi.
             </p>
           </div>
         </div>

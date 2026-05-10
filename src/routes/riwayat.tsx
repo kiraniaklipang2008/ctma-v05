@@ -451,10 +451,23 @@ function TxRow({ tx, open, onToggle }: { tx: Tx; open: boolean; onToggle: () => 
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-foreground truncate">{tx.name}</p>
-          <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+          <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 flex-wrap">
             <span className="px-1.5 py-0.5 rounded bg-secondary text-[9px] font-bold uppercase tracking-wider">
               {meta.label}
             </span>
+            {tx.status && (
+              <span
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider text-white ${
+                  tx.status === "approved"
+                    ? "bg-success"
+                    : tx.status === "rejected"
+                    ? "bg-destructive"
+                    : "bg-[oklch(0.78_0.16_75)]"
+                }`}
+              >
+                {tx.status}
+              </span>
+            )}
             {fmtTime(tx.date)}
           </p>
         </div>

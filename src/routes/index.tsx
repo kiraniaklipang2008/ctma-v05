@@ -61,7 +61,7 @@ function LoginPage() {
         </div>
 
         {/* Form card */}
-        <div className="px-6 -mt-12 relative z-10">
+        <div className="px-6 -mt-8 relative z-10">
           <form
             onSubmit={(e) => {
               e.preventDefault();

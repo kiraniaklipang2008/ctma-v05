@@ -25,7 +25,7 @@ export const Route = createFileRoute("/dashboard")({
 const actions = [
   { label: "Topup Saldo", icon: Plus, accent: "from-primary to-primary-glow", to: "/topup" as const },
   { label: "Atur Limit", icon: Sliders, accent: "from-primary-deep to-primary", to: "/limit" as const },
-  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary", to: "/dashboard" as const },
+  { label: "Riwayat", icon: History, accent: "from-primary-glow to-primary", to: "/riwayat" as const },
 ];
 
 const txs = [
@@ -149,7 +149,7 @@ function Dashboard() {
       <section className="px-6 mt-7">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-base font-bold text-foreground">Transaksi Terbaru</h3>
-          <button className="text-xs font-semibold text-primary">Lihat Semua</button>
+          <button onClick={() => navigate({ to: "/riwayat" })} className="text-xs font-semibold text-primary">Lihat Semua</button>
         </div>
 
         <div className="bg-card rounded-3xl border border-border divide-y divide-border overflow-hidden shadow-[var(--shadow-soft)]">

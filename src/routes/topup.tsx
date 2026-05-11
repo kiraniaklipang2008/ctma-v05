@@ -15,6 +15,12 @@ import {
   Clock,
   ImageIcon,
   X,
+  Camera,
+  ImagePlus,
+  AlertCircle,
+  ZoomIn,
+  RefreshCw,
+  FileImage,
 } from "lucide-react";
 
 export const Route = createFileRoute("/topup")({
@@ -55,7 +61,6 @@ function TopupPage() {
   const [method, setMethod] = useState<string>("bca");
   const [proof, setProof] = useState<File | null>(null);
   const [proofUrl, setProofUrl] = useState<string>("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const selected = useMemo(() => METHODS.find((m) => m.id === method)!, [method]);
 
@@ -84,10 +89,9 @@ function TopupPage() {
         proof={proof}
         proofUrl={proofUrl}
         onBack={() => setStep("form")}
-        onPickFile={() => fileRef.current?.click()}
-        onRemoveFile={() => {
-          setProof(null);
-          setProofUrl("");
+        onSelectFile={(f) => {
+          setProof(f);
+          setProofUrl(f ? URL.createObjectURL(f) : "");
         }}
         onSubmit={() => setStep("pending")}
       />
@@ -109,19 +113,6 @@ function TopupPage() {
   return (
     <div className="min-h-screen w-full flex justify-center bg-secondary">
       <div className="relative w-full max-w-md min-h-screen bg-background pb-32">
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) {
-              setProof(f);
-              setProofUrl(URL.createObjectURL(f));
-            }
-          }}
-        />
 
         {/* Hero */}
         <div
@@ -309,8 +300,7 @@ function ConfirmScreen({
   proof,
   proofUrl,
   onBack,
-  onPickFile,
-  onRemoveFile,
+  onSelectFile,
   onSubmit,
 }: {
   amount: number;
@@ -322,8 +312,7 @@ function ConfirmScreen({
   proof: File | null;
   proofUrl: string;
   onBack: () => void;
-  onPickFile: () => void;
-  onRemoveFile: () => void;
+  onSelectFile: (f: File | null) => void;
   onSubmit: () => void;
 }) {
   return (
@@ -387,56 +376,38 @@ function ConfirmScreen({
 
         {/* Upload proof */}
         <section className="px-6 mt-6">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
-            Upload Bukti Bayar
-          </p>
-
-          {!proof ? (
-            <button
-              onClick={onPickFile}
-              className="w-full rounded-3xl border-2 border-dashed border-border bg-card p-6 flex flex-col items-center gap-2 active:bg-secondary transition"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary">
-                <Upload size={20} />
-              </div>
-              <p className="text-sm font-bold text-foreground">Tap untuk upload</p>
-              <p className="text-[11px] text-muted-foreground text-center">
-                Format JPG / PNG, maksimal 5 MB
-              </p>
-            </button>
-          ) : (
-            <div className="rounded-3xl border border-border bg-card p-3">
-              <div className="relative rounded-2xl overflow-hidden bg-secondary">
-                {proofUrl ? (
-                  <img src={proofUrl} alt="bukti" className="w-full h-48 object-cover" />
-                ) : (
-                  <div className="h-48 flex items-center justify-center text-muted-foreground">
-                    <ImageIcon size={32} />
-                  </div>
-                )}
-                <button
-                  onClick={onRemoveFile}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-              <div className="mt-3 px-1 flex items-center gap-2 text-[11px]">
-                <CheckCircle2 size={14} className="text-success" />
-                <span className="font-semibold text-foreground truncate flex-1">{proof.name}</span>
-                <span className="text-muted-foreground">
-                  {(proof.size / 1024).toFixed(0)} KB
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-3 rounded-2xl bg-accent border border-border p-3 flex items-start gap-2">
-            <ShieldCheck size={14} className="text-primary mt-0.5 shrink-0" />
-            <p className="text-[11px] text-foreground leading-relaxed">
-              Pastikan nominal transfer <b>persis {fmt(uniqueAmount)}</b> agar
-              petugas dapat memverifikasi pembayaran Anda dengan cepat.
+          <div className="flex items-end justify-between mb-2 px-1">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Upload Bukti Bayar
             </p>
+            <span className="text-[10px] font-bold text-destructive">*Wajib</span>
+          </div>
+
+          <ProofUploader
+            proof={proof}
+            proofUrl={proofUrl}
+            onSelectFile={onSelectFile}
+          />
+
+          {/* Tips checklist */}
+          <div className="mt-3 rounded-2xl bg-card border border-border p-3.5">
+            <p className="text-[11px] font-bold text-foreground mb-2 flex items-center gap-1.5">
+              <ShieldCheck size={13} className="text-primary" />
+              Pastikan bukti memenuhi:
+            </p>
+            <ul className="space-y-1.5">
+              {[
+                <>Nominal transfer <b>persis {fmt(uniqueAmount)}</b></>,
+                <>Tujuan: <b>{method.account}</b> ({method.label})</>,
+                <>Tanggal & jam transfer terlihat jelas</>,
+                <>Foto tidak buram dan tidak terpotong</>,
+              ].map((t, i) => (
+                <li key={i} className="flex items-start gap-2 text-[11px] text-foreground leading-relaxed">
+                  <CheckCircle2 size={12} className="text-success mt-0.5 shrink-0" />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
@@ -625,5 +596,261 @@ function Step({ label, sub, done, active }: { label: string; sub: string; done?:
       </p>
       <p className="text-[11px] text-muted-foreground">{sub}</p>
     </li>
+  );
+}
+
+/* ───────────── Proof Uploader ───────────── */
+
+const MAX_PROOF_BYTES = 5 * 1024 * 1024; // 5 MB
+const ACCEPTED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+function ProofUploader({
+  proof,
+  proofUrl,
+  onSelectFile,
+}: {
+  proof: File | null;
+  proofUrl: string;
+  onSelectFile: (f: File | null) => void;
+}) {
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string>("");
+  const [progress, setProgress] = useState<number>(0);
+  const [uploading, setUploading] = useState(false);
+  const [drag, setDrag] = useState(false);
+  const [zoom, setZoom] = useState(false);
+
+  const validate = (file: File): string => {
+    if (!ACCEPTED_TYPES.includes(file.type)) return "Format harus JPG, PNG, atau WEBP.";
+    if (file.size > MAX_PROOF_BYTES)
+      return `Ukuran maksimal 5 MB. File Anda ${(file.size / 1024 / 1024).toFixed(1)} MB.`;
+    return "";
+  };
+
+  const handleFile = (file: File | undefined | null) => {
+    if (!file) return;
+    const err = validate(file);
+    if (err) {
+      setError(err);
+      return;
+    }
+    setError("");
+    setUploading(true);
+    setProgress(0);
+    let p = 0;
+    const interval = setInterval(() => {
+      p += 18 + Math.random() * 14;
+      if (p >= 100) {
+        p = 100;
+        clearInterval(interval);
+        setProgress(100);
+        setTimeout(() => {
+          setUploading(false);
+          onSelectFile(file);
+        }, 180);
+      } else {
+        setProgress(p);
+      }
+    }, 90);
+  };
+
+  const reset = () => {
+    setError("");
+    setProgress(0);
+    setUploading(false);
+    onSelectFile(null);
+  };
+
+  return (
+    <>
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          handleFile(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => {
+          handleFile(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
+
+      {!proof && !uploading && (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDrag(true);
+          }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDrag(false);
+            handleFile(e.dataTransfer.files?.[0]);
+          }}
+          className={`rounded-3xl border-2 border-dashed p-5 transition ${
+            drag
+              ? "border-primary bg-primary/5 scale-[1.01]"
+              : error
+              ? "border-destructive/50 bg-destructive/5"
+              : "border-border bg-card"
+          }`}
+        >
+          <div className="flex flex-col items-center text-center">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center text-primary-foreground shadow-[var(--shadow-glow)]"
+              style={{ background: "var(--gradient-card)" }}
+            >
+              <FileImage size={24} />
+            </div>
+            <p className="mt-3 text-sm font-bold text-foreground">
+              Tarik & lepas bukti di sini
+            </p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              atau pilih sumber di bawah · JPG / PNG / WEBP · maks 5 MB
+            </p>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
+            <button
+              onClick={() => cameraRef.current?.click()}
+              className="flex flex-col items-center gap-1 py-3 rounded-2xl bg-secondary border border-border active:scale-95 transition"
+            >
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <Camera size={16} />
+              </div>
+              <span className="text-[12px] font-bold text-foreground">Kamera</span>
+              <span className="text-[10px] text-muted-foreground">Foto langsung</span>
+            </button>
+            <button
+              onClick={() => galleryRef.current?.click()}
+              className="flex flex-col items-center gap-1 py-3 rounded-2xl bg-secondary border border-border active:scale-95 transition"
+            >
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <ImagePlus size={16} />
+              </div>
+              <span className="text-[12px] font-bold text-foreground">Galeri</span>
+              <span className="text-[10px] text-muted-foreground">Dari perangkat</span>
+            </button>
+          </div>
+
+          {error && (
+            <div className="mt-3 rounded-xl bg-destructive/10 border border-destructive/30 px-3 py-2 flex items-start gap-2">
+              <AlertCircle size={13} className="text-destructive mt-0.5 shrink-0" />
+              <p className="text-[11px] font-semibold text-destructive leading-relaxed">
+                {error}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {uploading && (
+        <div className="rounded-3xl border border-border bg-card p-5">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <Upload size={18} className="animate-pulse" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-foreground">Mengunggah bukti…</p>
+              <p className="text-[11px] text-muted-foreground">Mohon tunggu sebentar</p>
+            </div>
+            <span className="text-sm font-bold text-primary tabular-nums">
+              {Math.round(progress)}%
+            </span>
+          </div>
+          <div className="mt-3 h-2 rounded-full bg-secondary overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${progress}%`, background: "var(--gradient-card)" }}
+            />
+          </div>
+        </div>
+      )}
+
+      {proof && !uploading && (
+        <div className="rounded-3xl border border-border bg-card overflow-hidden shadow-[var(--shadow-soft)]">
+          <div className="relative bg-secondary">
+            {proofUrl ? (
+              <img src={proofUrl} alt="Bukti transfer" className="w-full h-56 object-cover" />
+            ) : (
+              <div className="h-56 flex items-center justify-center text-muted-foreground">
+                <ImageIcon size={32} />
+              </div>
+            )}
+
+            <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-success text-white text-[10px] font-bold shadow">
+              <CheckCircle2 size={11} /> Siap dikirim
+            </span>
+
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+              <button
+                onClick={() => setZoom(true)}
+                className="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur active:scale-95"
+                aria-label="Perbesar"
+              >
+                <ZoomIn size={14} />
+              </button>
+              <button
+                onClick={reset}
+                className="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur active:scale-95"
+                aria-label="Hapus"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-3 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-success/15 text-success flex items-center justify-center shrink-0">
+              <FileImage size={16} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-bold text-foreground truncate">{proof.name}</p>
+              <p className="text-[10px] text-muted-foreground">
+                {(proof.size / 1024).toFixed(0)} KB ·{" "}
+                {proof.type.replace("image/", "").toUpperCase()}
+              </p>
+            </div>
+            <button
+              onClick={() => galleryRef.current?.click()}
+              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-secondary border border-border text-[11px] font-bold text-primary active:scale-95"
+            >
+              <RefreshCw size={12} /> Ganti
+            </button>
+          </div>
+        </div>
+      )}
+
+      {zoom && proofUrl && (
+        <div
+          onClick={() => setZoom(false)}
+          className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in"
+        >
+          <button
+            onClick={() => setZoom(false)}
+            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center backdrop-blur"
+          >
+            <X size={18} />
+          </button>
+          <img
+            src={proofUrl}
+            alt="Preview bukti"
+            className="max-h-full max-w-full rounded-2xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </>
   );
 }

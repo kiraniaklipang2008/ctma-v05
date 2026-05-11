@@ -492,34 +492,46 @@ function TxRow({ tx, open, onToggle }: { tx: Tx; open: boolean; onToggle: () => 
           <div className="grid grid-cols-2 gap-3 mt-3 mb-3">
             {tx.merchant && <Mini icon={Store} k="Merchant" v={tx.merchant} />}
             {tx.cashier && <Mini icon={Receipt} k="Kasir" v={tx.cashier} />}
-            {tx.method && <Mini icon={CreditCard} k="Metode" v={tx.method} />}
-            <Mini icon={Clock} k="Waktu" v={`${fmtDate(tx.date)} · ${fmtTime(tx.date)}`} />
             {tx.ref && <Mini icon={Hash} k="Ref" v={tx.ref} />}
+            <Mini icon={Clock} k="Waktu" v={`${fmtDate(tx.date)} · ${fmtTime(tx.date)}`} />
           </div>
 
           {tx.items && tx.items.length > 0 && (
-            <div className="rounded-2xl bg-card border border-border overflow-hidden">
-              <div className="px-3 py-2 border-b border-border flex items-center gap-2">
-                <ShoppingBag size={13} className="text-primary" />
-                <p className="text-[11px] font-bold text-foreground">Detail Belanja</p>
+            <div className="rounded-2xl bg-card border-2 border-primary/20 overflow-hidden shadow-[var(--shadow-card)]">
+              <div
+                className="px-4 py-3 flex items-center gap-2.5 text-primary-foreground"
+                style={{ background: "var(--gradient-card)" }}
+              >
+                <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+                  <ShoppingBag size={15} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-bold leading-tight">Detail Belanja</p>
+                  <p className="text-[10px] opacity-80">{tx.items.length} item dibeli</p>
+                </div>
+                <span className="px-2 py-1 rounded-full bg-white/20 backdrop-blur text-[10px] font-bold">
+                  {tx.items.reduce((a, b) => a + b.qty, 0)}× pcs
+                </span>
               </div>
               <div className="divide-y divide-border">
                 {tx.items.map((it, i) => (
-                  <div key={i} className="px-3 py-2.5 flex items-start gap-2 text-xs">
-                    <span className="w-6 h-6 rounded-md bg-secondary text-primary text-[10px] font-bold flex items-center justify-center shrink-0">
+                  <div key={i} className="px-3.5 py-3 flex items-start gap-3 text-xs hover:bg-secondary/40 transition">
+                    <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary text-[11px] font-bold flex items-center justify-center shrink-0 ring-1 ring-primary/20">
                       {it.qty}×
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-foreground truncate">{it.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{fmt(it.price)} / pcs</p>
+                      <p className="font-bold text-foreground text-[13px] truncate">{it.name}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                        @ <span className="font-semibold text-foreground/70">{fmt(it.price)}</span> / pcs
+                      </p>
                     </div>
-                    <span className="font-bold text-foreground">{fmt(it.qty * it.price)}</span>
+                    <span className="font-bold text-foreground text-[13px] tabular-nums">{fmt(it.qty * it.price)}</span>
                   </div>
                 ))}
               </div>
-              <div className="px-3 py-2.5 bg-secondary/60 flex items-center justify-between">
-                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Total</span>
-                <span className="text-sm font-bold text-foreground">{fmt(itemTotal)}</span>
+              <div className="px-4 py-3 bg-secondary border-t-2 border-dashed border-border flex items-center justify-between">
+                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Total Belanja</span>
+                <span className="text-base font-extrabold text-primary tabular-nums">{fmt(itemTotal)}</span>
               </div>
             </div>
           )}

@@ -300,8 +300,7 @@ function ConfirmScreen({
   proof,
   proofUrl,
   onBack,
-  onPickFile,
-  onRemoveFile,
+  onSelectFile,
   onSubmit,
 }: {
   amount: number;
@@ -313,8 +312,7 @@ function ConfirmScreen({
   proof: File | null;
   proofUrl: string;
   onBack: () => void;
-  onPickFile: () => void;
-  onRemoveFile: () => void;
+  onSelectFile: (f: File | null) => void;
   onSubmit: () => void;
 }) {
   return (

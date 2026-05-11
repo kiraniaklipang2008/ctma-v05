@@ -15,6 +15,12 @@ import {
   Clock,
   ImageIcon,
   X,
+  Camera,
+  ImagePlus,
+  AlertCircle,
+  ZoomIn,
+  RefreshCw,
+  FileImage,
 } from "lucide-react";
 
 export const Route = createFileRoute("/topup")({

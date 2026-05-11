@@ -174,8 +174,6 @@ const TYPE_TABS: { id: "all" | TxType; label: string }[] = [
 
 const CAT_FILTERS: { id: "all" | Category; label: string }[] = [
   { id: "all", label: "Semua" },
-  { id: "mart", label: "Pondok Mart" },
-  { id: "kantin", label: "Kantin" },
   { id: "minuman", label: "Minuman" },
   { id: "alat", label: "Alat Tulis" },
   { id: "spp", label: "SPP" },

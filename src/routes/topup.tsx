@@ -113,19 +113,6 @@ function TopupPage() {
   return (
     <div className="min-h-screen w-full flex justify-center bg-secondary">
       <div className="relative w-full max-w-md min-h-screen bg-background pb-32">
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) {
-              setProof(f);
-              setProofUrl(URL.createObjectURL(f));
-            }
-          }}
-        />
 
         {/* Hero */}
         <div

@@ -90,10 +90,9 @@ function TopupPage() {
         proof={proof}
         proofUrl={proofUrl}
         onBack={() => setStep("form")}
-        onPickFile={() => fileRef.current?.click()}
-        onRemoveFile={() => {
-          setProof(null);
-          setProofUrl("");
+        onSelectFile={(f) => {
+          setProof(f);
+          setProofUrl(f ? URL.createObjectURL(f) : "");
         }}
         onSubmit={() => setStep("pending")}
       />

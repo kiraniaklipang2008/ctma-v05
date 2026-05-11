@@ -61,7 +61,6 @@ function TopupPage() {
   const [method, setMethod] = useState<string>("bca");
   const [proof, setProof] = useState<File | null>(null);
   const [proofUrl, setProofUrl] = useState<string>("");
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const selected = useMemo(() => METHODS.find((m) => m.id === method)!, [method]);
 

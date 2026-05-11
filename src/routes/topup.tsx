@@ -376,56 +376,38 @@ function ConfirmScreen({
 
         {/* Upload proof */}
         <section className="px-6 mt-6">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">
-            Upload Bukti Bayar
-          </p>
-
-          {!proof ? (
-            <button
-              onClick={onPickFile}
-              className="w-full rounded-3xl border-2 border-dashed border-border bg-card p-6 flex flex-col items-center gap-2 active:bg-secondary transition"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary">
-                <Upload size={20} />
-              </div>
-              <p className="text-sm font-bold text-foreground">Tap untuk upload</p>
-              <p className="text-[11px] text-muted-foreground text-center">
-                Format JPG / PNG, maksimal 5 MB
-              </p>
-            </button>
-          ) : (
-            <div className="rounded-3xl border border-border bg-card p-3">
-              <div className="relative rounded-2xl overflow-hidden bg-secondary">
-                {proofUrl ? (
-                  <img src={proofUrl} alt="bukti" className="w-full h-48 object-cover" />
-                ) : (
-                  <div className="h-48 flex items-center justify-center text-muted-foreground">
-                    <ImageIcon size={32} />
-                  </div>
-                )}
-                <button
-                  onClick={onRemoveFile}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-              <div className="mt-3 px-1 flex items-center gap-2 text-[11px]">
-                <CheckCircle2 size={14} className="text-success" />
-                <span className="font-semibold text-foreground truncate flex-1">{proof.name}</span>
-                <span className="text-muted-foreground">
-                  {(proof.size / 1024).toFixed(0)} KB
-                </span>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-3 rounded-2xl bg-accent border border-border p-3 flex items-start gap-2">
-            <ShieldCheck size={14} className="text-primary mt-0.5 shrink-0" />
-            <p className="text-[11px] text-foreground leading-relaxed">
-              Pastikan nominal transfer <b>persis {fmt(uniqueAmount)}</b> agar
-              petugas dapat memverifikasi pembayaran Anda dengan cepat.
+          <div className="flex items-end justify-between mb-2 px-1">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Upload Bukti Bayar
             </p>
+            <span className="text-[10px] font-bold text-destructive">*Wajib</span>
+          </div>
+
+          <ProofUploader
+            proof={proof}
+            proofUrl={proofUrl}
+            onSelectFile={onSelectFile}
+          />
+
+          {/* Tips checklist */}
+          <div className="mt-3 rounded-2xl bg-card border border-border p-3.5">
+            <p className="text-[11px] font-bold text-foreground mb-2 flex items-center gap-1.5">
+              <ShieldCheck size={13} className="text-primary" />
+              Pastikan bukti memenuhi:
+            </p>
+            <ul className="space-y-1.5">
+              {[
+                <>Nominal transfer <b>persis {fmt(uniqueAmount)}</b></>,
+                <>Tujuan: <b>{method.account}</b> ({method.label})</>,
+                <>Tanggal & jam transfer terlihat jelas</>,
+                <>Foto tidak buram dan tidak terpotong</>,
+              ].map((t, i) => (
+                <li key={i} className="flex items-start gap-2 text-[11px] text-foreground leading-relaxed">
+                  <CheckCircle2 size={12} className="text-success mt-0.5 shrink-0" />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

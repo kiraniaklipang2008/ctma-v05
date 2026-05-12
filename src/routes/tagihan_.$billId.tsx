@@ -76,52 +76,55 @@ function BillDetail() {
           <ActiveSantriPill />
         </div>
 
-        {/* Bill summary */}
-        <div className="px-5 pt-6">
-          <div className="flex items-center gap-2">
-            <span className="w-1 h-5 rounded-full bg-primary" />
-            <h2 className="text-base font-extrabold text-foreground tracking-tight uppercase">
-              {bill.name}
-            </h2>
-          </div>
-
-          <p className="mt-4 text-xs text-muted-foreground">Total {bill.shortName}</p>
-          <p className="text-2xl font-extrabold text-foreground">{fmt(bill.total)}</p>
-
-          <div className="mt-4 grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-xs text-muted-foreground">Sudah Bayar</p>
-              <p className="text-sm font-bold text-foreground">{fmt(bill.paid)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Belum Bayar</p>
-              <p
-                className={`text-sm font-bold ${
-                  isFullyPaid ? "text-success" : "text-[oklch(0.62_0.22_25)]"
+        {/* Bill summary card */}
+        <div className="px-4 pt-4">
+          <div className="rounded-3xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="w-1 h-5 rounded-full bg-primary shrink-0" />
+                <h2 className="text-sm font-semibold text-foreground tracking-tight uppercase truncate">
+                  {bill.name}
+                </h2>
+              </div>
+              <span
+                className={`shrink-0 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-semibold text-white ${
+                  isFullyPaid
+                    ? "bg-success"
+                    : isPartial
+                    ? "bg-[oklch(0.78_0.16_75)]"
+                    : "bg-[oklch(0.62_0.22_25)]"
                 }`}
               >
-                {fmt(remaining)}
-              </p>
+                {isFullyPaid && <CheckCircle2 size={12} />}
+                {isFullyPaid ? "Lunas" : isPartial ? "Proses Bayar" : "Belum Bayar"}
+              </span>
+            </div>
+
+            <div className="mt-3">
+              <p className="text-[11px] text-muted-foreground">Total {bill.shortName}</p>
+              <p className="text-2xl font-bold text-foreground tabular-nums">{fmt(bill.total)}</p>
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-border grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[11px] text-muted-foreground">Sudah Bayar</p>
+                <p className="text-sm font-semibold text-foreground tabular-nums">{fmt(bill.paid)}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-muted-foreground">Belum Bayar</p>
+                <p
+                  className={`text-sm font-semibold tabular-nums ${
+                    isFullyPaid ? "text-success" : "text-[oklch(0.62_0.22_25)]"
+                  }`}
+                >
+                  {fmt(remaining)}
+                </p>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="mt-4">
-            <p className="text-xs text-muted-foreground mb-1.5">Status</p>
-            <span
-              className={`inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-xs font-bold text-white ${
-                isFullyPaid
-                  ? "bg-success"
-                  : isPartial
-                  ? "bg-[oklch(0.78_0.16_75)]"
-                  : "bg-[oklch(0.62_0.22_25)]"
-              }`}
-            >
-              {isFullyPaid && <CheckCircle2 size={14} />}
-              {isFullyPaid ? "Lunas" : isPartial ? "Proses Bayar" : "Belum Bayar"}
-            </span>
-          </div>
-
-          <div className="mt-5 h-px bg-border" />
+        <div className="px-5 pt-2">
 
           {/* Installments */}
           <div className="mt-5">

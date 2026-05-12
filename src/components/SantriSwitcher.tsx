@@ -67,25 +67,25 @@ export function SantriSwitcherSheet({
       />
 
       {/* Sheet */}
-      <div className="relative w-full max-w-md bg-background rounded-t-[2rem] pb-6 pt-3 shadow-[var(--shadow-card)] animate-in slide-in-from-bottom duration-200">
-        <div className="mx-auto w-12 h-1.5 rounded-full bg-border" />
+      <div className="relative w-[calc(100%-1rem)] max-w-md mx-2 mb-2 bg-background rounded-[1.75rem] pb-4 pt-2.5 shadow-[var(--shadow-card)] animate-in slide-in-from-bottom duration-200">
+        <div className="mx-auto w-10 h-1 rounded-full bg-border" />
 
-        <div className="px-5 mt-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-bold text-foreground">Pilih Santri</h3>
-            <p className="text-[11px] text-muted-foreground">
+        <div className="px-4 mt-2.5 flex items-center justify-between">
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-bold text-foreground leading-tight">Pilih Santri</h3>
+            <p className="text-[11px] text-muted-foreground leading-tight">
               Akun wali Anda terhubung ke {santri.length} santri.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground"
+            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground shrink-0"
           >
-            <X size={16} />
+            <X size={14} />
           </button>
         </div>
 
-        <div className="px-4 mt-4 space-y-2 max-h-[55vh] overflow-y-auto">
+        <div className="px-3 mt-3 space-y-1.5 max-h-[55vh] overflow-y-auto">
           {santri.map((s) => (
             <SantriRow
               key={s.id}
@@ -98,8 +98,8 @@ export function SantriSwitcherSheet({
             />
           ))}
 
-          <button className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-dashed border-border text-primary text-sm font-bold active:scale-[0.99] transition">
-            <Plus size={16} /> Tambah Santri
+          <button className="w-full mt-1.5 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 border-dashed border-border text-primary text-[13px] font-bold active:scale-[0.99] transition">
+            <Plus size={14} /> Tambah Santri
           </button>
         </div>
       </div>

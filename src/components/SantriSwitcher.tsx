@@ -67,25 +67,25 @@ export function SantriSwitcherSheet({
       />
 
       {/* Sheet */}
-      <div className="relative w-full max-w-md bg-background rounded-t-[2rem] pb-6 pt-3 shadow-[var(--shadow-card)] animate-in slide-in-from-bottom duration-200">
-        <div className="mx-auto w-12 h-1.5 rounded-full bg-border" />
+      <div className="relative w-[calc(100%-1rem)] max-w-md mx-2 mb-2 bg-background rounded-[1.75rem] pb-4 pt-2.5 shadow-[var(--shadow-card)] animate-in slide-in-from-bottom duration-200">
+        <div className="mx-auto w-10 h-1 rounded-full bg-border" />
 
-        <div className="px-5 mt-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-bold text-foreground">Pilih Santri</h3>
-            <p className="text-[11px] text-muted-foreground">
+        <div className="px-4 mt-2.5 flex items-center justify-between">
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-bold text-foreground leading-tight">Pilih Santri</h3>
+            <p className="text-[11px] text-muted-foreground leading-tight">
               Akun wali Anda terhubung ke {santri.length} santri.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground"
+            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground shrink-0"
           >
-            <X size={16} />
+            <X size={14} />
           </button>
         </div>
 
-        <div className="px-4 mt-4 space-y-2 max-h-[55vh] overflow-y-auto">
+        <div className="px-3 mt-3 space-y-1.5 max-h-[55vh] overflow-y-auto">
           {santri.map((s) => (
             <SantriRow
               key={s.id}
@@ -98,8 +98,8 @@ export function SantriSwitcherSheet({
             />
           ))}
 
-          <button className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-dashed border-border text-primary text-sm font-bold active:scale-[0.99] transition">
-            <Plus size={16} /> Tambah Santri
+          <button className="w-full mt-1.5 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 border-dashed border-border text-primary text-[13px] font-bold active:scale-[0.99] transition">
+            <Plus size={14} /> Tambah Santri
           </button>
         </div>
       </div>
@@ -119,46 +119,46 @@ function SantriRow({
   return (
     <button
       onClick={onPick}
-      className={`w-full flex items-center gap-3 p-3 rounded-2xl border transition text-left ${
+      className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl border transition text-left ${
         active
           ? "border-primary bg-accent/60"
           : "border-border bg-card active:bg-secondary"
       }`}
     >
       <div
-        className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${santri.color} text-primary-foreground font-bold flex items-center justify-center shadow-[var(--shadow-soft)] shrink-0`}
+        className={`w-10 h-10 rounded-xl bg-gradient-to-br ${santri.color} text-primary-foreground text-[13px] font-bold flex items-center justify-center shadow-[var(--shadow-soft)] shrink-0`}
       >
         {santri.initials}
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-bold text-foreground truncate">
+        <div className="flex items-center gap-1.5">
+          <p className="text-[13px] font-bold text-foreground truncate">
             {santri.name}
           </p>
           {active && (
-            <span className="inline-flex items-center gap-0.5 text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+            <span className="inline-flex items-center text-[8px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1 py-0.5 rounded">
               Aktif
             </span>
           )}
         </div>
-        <p className="text-[11px] text-muted-foreground">
-          {santri.jenjang} · Kelas {santri.className} · Kartu ••{santri.cardSuffix}
+        <p className="text-[10px] text-muted-foreground leading-tight">
+          {santri.jenjang} · Kelas {santri.className} · ••{santri.cardSuffix}
         </p>
-        <div className="mt-1 flex items-center gap-3 text-[10px] font-semibold">
-          <span className="text-success">Saldo {fmt(santri.saldo)}</span>
-          <span className="text-muted-foreground">
+        <div className="mt-0.5 flex items-center gap-2 text-[10px] font-semibold">
+          <span className="text-success tabular-nums">Saldo {fmt(santri.saldo)}</span>
+          <span className="text-muted-foreground tabular-nums">
             Tagihan {fmt(santri.totalDue)}
           </span>
         </div>
       </div>
 
       <span
-        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${
+        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
           active ? "bg-primary border-primary" : "border-border"
         }`}
       >
-        {active && <Check size={14} className="text-primary-foreground" strokeWidth={3} />}
+        {active && <Check size={12} className="text-primary-foreground" strokeWidth={3} />}
       </span>
     </button>
   );

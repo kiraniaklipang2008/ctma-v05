@@ -265,20 +265,34 @@ function CheckBox({ checked, disabled }: { checked: boolean; disabled?: boolean 
 function ActiveSantriPill() {
   const { active } = useSantri();
   return (
-    <div className="rounded-2xl bg-card border border-border shadow-[var(--shadow-soft)] p-3 flex items-center gap-3">
-      <div className="w-12 h-12 rounded-full bg-[var(--gradient-card)] text-primary-foreground flex items-center justify-center shrink-0 font-bold">
-        {active.initials}
+    <div
+      className="relative overflow-hidden rounded-3xl p-4 text-primary-foreground shadow-[var(--shadow-glow)]"
+      style={{ background: "var(--gradient-hero)" }}
+    >
+      <div className="absolute -top-12 -right-8 w-40 h-40 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-white/5 blur-2xl" />
+
+      <div className="relative flex items-center gap-3">
+        <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 backdrop-blur text-primary-foreground flex items-center justify-center shrink-0 font-bold shadow-[var(--shadow-soft)]">
+          {active.initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">
+            Nama Siswa / Santri
+          </p>
+          <p className="text-sm font-extrabold text-white truncate leading-tight mt-0.5">
+            {active.name.toUpperCase()}
+          </p>
+          <p className="text-[11px] text-white/70 mt-0.5">
+            {active.jenjang} · Kelas {active.className} · ••{active.cardSuffix}
+          </p>
+        </div>
+        <SantriSwitcherTrigger>
+          <span className="px-2.5 py-1 rounded-full bg-white/15 border border-white/20 text-[10px] font-semibold backdrop-blur flex items-center gap-1 shrink-0">
+            Ganti
+          </span>
+        </SantriSwitcherTrigger>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] text-muted-foreground">Nama Siswa / Santri</p>
-        <p className="text-sm font-bold text-foreground truncate">
-          {active.name.toUpperCase()}
-        </p>
-        <p className="text-[11px] text-muted-foreground">
-          {active.jenjang} · Kelas {active.className}
-        </p>
-      </div>
-      <SantriSwitcherTrigger variant="subtle">Ganti</SantriSwitcherTrigger>
     </div>
   );
 }

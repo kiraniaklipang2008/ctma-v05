@@ -110,37 +110,52 @@ function PembayaranPage() {
           </div>
         </div>
 
-        {/* Bank card */}
+        {/* Bank card — modern purple */}
         <div className="px-5 pt-3">
-          <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)] p-4">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-secondary text-primary flex items-center justify-center">
-                <Building2 size={16} />
+          <div
+            className="relative overflow-hidden rounded-3xl p-4 shadow-[var(--shadow-glow)]"
+            style={{ background: "var(--gradient-hero)" }}
+          >
+            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-8 w-36 h-36 rounded-full bg-white/5 blur-2xl pointer-events-none" />
+
+            <div className="relative flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/20 backdrop-blur text-white flex items-center justify-center shadow-[var(--shadow-soft)]">
+                <Building2 size={18} />
               </div>
-              <div>
-                <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">
                   Transfer ke
                 </p>
-                <p className="text-sm font-bold text-foreground">
+                <p className="text-sm font-extrabold text-white leading-tight">
                   Bank {tx.bankName}
                 </p>
               </div>
             </div>
 
-            <div className="mt-3 rounded-xl bg-secondary/70 border border-border px-3 py-2.5 flex items-center justify-between gap-2">
+            <div className="relative mt-3 rounded-2xl bg-white/15 border border-white/20 backdrop-blur px-3.5 py-3 flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">
                   Nomor Rekening
                 </p>
-                <p className="text-base font-extrabold text-foreground tracking-wider truncate">
+                <p className="text-lg font-extrabold text-white tracking-wider tabular-nums truncate">
                   {tx.bankAccount}
                 </p>
               </div>
-              <CopyButton value={tx.bankAccount} label="Salin" />
+              <button
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(tx.bankAccount);
+                  } catch {}
+                }}
+                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/15 border border-white/20 text-white text-[11px] font-semibold backdrop-blur active:scale-95 transition"
+              >
+                <Copy size={12} /> Salin
+              </button>
             </div>
 
-            <p className="mt-2 text-[11px] text-muted-foreground">
-              a.n. <span className="font-bold text-foreground">{tx.bankHolder}</span>
+            <p className="relative mt-2.5 text-[11px] text-white/70">
+              a.n. <span className="font-bold text-white">{tx.bankHolder}</span>
             </p>
           </div>
         </div>
